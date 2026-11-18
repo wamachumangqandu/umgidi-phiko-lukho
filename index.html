@@ -35,10 +35,16 @@
   section{padding:40px 0;text-align:center}
   h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(32px,7vw,44px);margin:0 0 6px}
   .sub{margin:0 0 24px;color:var(--muted);font-style:italic}
-  .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-  .photos figure{margin:0}
-  .photos img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 20%;display:block;border:5px solid var(--ink);outline:2px solid var(--ochre);outline-offset:3px}
-  .photos figcaption{margin-top:10px;font-weight:600;font-size:15px}
+  .slides{position:relative;width:min(420px,88vw);margin:0 auto}
+  .slides .frame{position:relative;aspect-ratio:3/4;border:6px solid var(--ink);outline:3px solid var(--ochre);outline-offset:4px;overflow:hidden;background:var(--ink)}
+  .slides figure{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .9s ease}
+  .slides figure.on{opacity:1}
+  .slides img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+  .slides figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 10px 12px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font-weight:700;font-size:20px;letter-spacing:.04em}
+  .dots{display:flex;justify-content:center;gap:12px;margin-top:20px}
+  .dots button{width:14px;height:14px;min-height:0;padding:0;border:2px solid var(--ink);border-bottom:2px solid var(--ink);background:transparent;transform:rotate(45deg);cursor:pointer}
+  .dots button[aria-current="true"]{background:var(--ochre)}
+  .dots button:hover{background:var(--bead)}
   .divider{display:flex;align-items:center;justify-content:center;gap:14px}
   .divider span{width:90px;height:3px;background:var(--ink)}
   .divider i{width:12px;height:12px;transform:rotate(45deg);background:var(--bead)}
@@ -70,7 +76,6 @@
   footer{text-align:center;padding:28px 0 40px;color:var(--muted)}
   footer p{margin:0}
   @media (max-width:640px){
-    .photos{grid-template-columns:repeat(2,1fr)}
     .details{grid-template-columns:1fr}
     form{grid-template-columns:1fr}
     .count{gap:6px}
@@ -122,11 +127,14 @@
   <section>
     <h2>Uhambo lwakhe</h2>
     <p class="sub">Ukusuka ebuntwaneni ukuya ebudodeni</p>
-    <div class="photos">
-      <figure><img src="images/child.jpg" alt="As a young boy"><figcaption>Ebuntwaneni</figcaption></figure>
-      <figure><img src="images/school1.jpg" alt="In his school uniform"><figcaption>Esikolweni</figcaption></figure>
-      <figure><img src="images/school2.jpg" alt="Smiling in his school uniform"><figcaption>Ekukhuleni</figcaption></figure>
-      <figure><img src="images/umbhaco.jpg" alt="Enxibe umbhaco"><figcaption>Ngesiko</figcaption></figure>
+    <div class="slides" id="slides">
+      <div class="frame">
+        <figure class="on"><img src="images/child.jpg" alt="Esengumntwana"><figcaption>Ebuntwaneni</figcaption></figure>
+        <figure><img src="images/school1.jpg" alt="Enxibe iyunifomu yesikolo"><figcaption>Esikolweni</figcaption></figure>
+        <figure><img src="images/school2.jpg" alt="Encumile enxibe iyunifomu"><figcaption>Ekukhuleni</figcaption></figure>
+        <figure><img src="images/umbhaco.jpg" alt="Enxibe umbhaco"><figcaption>Ngesiko</figcaption></figure>
+      </div>
+      <div class="dots" id="dots"></div>
     </div>
   </section>
 
@@ -226,6 +234,28 @@ function tick(){
   $("s").textContent = pad(s%60);
 }
 tick(); setInterval(tick,1000);
+
+/* ===== Photo slideshow ===== */
+(() => {
+  const figs = [...document.querySelectorAll("#slides figure")];
+  const dots = $("dots");
+  let i = 0, timer = null;
+  const still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  figs.forEach((f, n) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("aria-label", "Umfanekiso " + (n + 1));
+    b.addEventListener("click", () => { show(n); start(); });
+    dots.appendChild(b);
+  });
+  function show(n){
+    i = (n + figs.length) % figs.length;
+    figs.forEach((f, k) => f.classList.toggle("on", k === i));
+    [...dots.children].forEach((b, k) => b.setAttribute("aria-current", k === i ? "true" : "false"));
+  }
+  function start(){ if (still) return; clearInterval(timer); timer = setInterval(() => show(i + 1), 3500); }
+  show(0); start();
+})();
 
 /* ===== Song ===== */
 const song = $("song"), playBtn = $("play");
