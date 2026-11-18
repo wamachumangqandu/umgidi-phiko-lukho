@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="xh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Umgidi Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cloth:#F3EDE0; --ink:#141414; --ochre:#A63D24; --bead:#2E8BC0; --muted:#4A4A4A; --card:#FBF8F2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cloth);color:var(--ink);font-family:'Outfit',sans-serif;line-height:1.5}
+  a{color:var(--ochre)}
+  .beads{height:36px;background:
+    linear-gradient(135deg,transparent 50%,#fff 50%) 0 0/36px 36px,
+    #fff;position:relative;overflow:hidden}
+  .beads svg{display:block;width:100%;height:36px}
+  .lines{border-top:8px solid var(--ink);border-bottom:3px solid var(--ink);height:16px;margin-bottom:0}
+  .lines.bottom{border-top:3px solid var(--ink);border-bottom:8px solid var(--ink)}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+  header{text-align:center;padding:40px 0 24px}
+  .kicker{margin:0;font-weight:600;letter-spacing:.35em;color:var(--ochre);font-size:15px}
+  h1{margin:4px 0 0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(72px,18vw,140px);line-height:1}
+  .name{margin:6px 0 0;font-size:clamp(24px,5vw,36px);font-weight:600}
+  .zig{display:block;margin:22px auto;width:min(360px,80%);height:18px}
+  .when{margin:0;font-size:clamp(18px,4vw,22px);font-weight:500}
+  .count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:560px;margin:26px auto 0}
+  .cell{background:var(--ink);color:#fff;padding:16px 4px 12px;text-align:center;border-bottom:5px solid var(--ochre)}
+  .cell:nth-child(even){border-bottom-color:var(--bead)}
+  .num{display:block;font-family:'DM Serif Display',serif;font-size:clamp(34px,9vw,54px);line-height:1}
+  .lbl{display:block;margin-top:6px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#E8E1D3}
+  .today{display:none;margin:26px auto 0;max-width:560px;background:var(--ink);color:#fff;padding:22px;font-size:24px;font-weight:600;border-bottom:5px solid var(--ochre)}
+  section{padding:40px 0;text-align:center}
+  h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(32px,7vw,44px);margin:0 0 6px}
+  .sub{margin:0 0 24px;color:var(--muted);font-style:italic}
+  .photos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .photos figure{margin:0}
+  .photos img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 20%;display:block;border:5px solid var(--ink);outline:2px solid var(--ochre);outline-offset:3px}
+  .photos figcaption{margin-top:10px;font-weight:600;font-size:15px}
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px}
+  .divider span{width:90px;height:3px;background:var(--ink)}
+  .divider i{width:12px;height:12px;transform:rotate(45deg);background:var(--bead)}
+  .divider i:nth-of-type(2){background:var(--ochre)}
+  .details{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;text-align:left}
+  .card{background:var(--card);border:2px solid var(--ink);border-left-width:2px;padding:18px 20px;position:relative}
+  .card::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:var(--ink);opacity:.15}
+  .card h3{margin:0 0 4px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre)}
+  .card p{margin:0;font-size:20px;font-weight:600}
+  .card small{display:block;color:var(--muted);font-size:15px;font-weight:400;margin-top:2px}
+  form{display:grid;grid-template-columns:2fr 1fr;gap:12px;text-align:left;max-width:620px;margin:0 auto}
+  label{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
+  input,textarea{width:100%;font:inherit;font-size:17px;padding:12px;border:2px solid var(--ink);background:#fff;color:var(--ink)}
+  .full{grid-column:1/-1}
+  button,.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 22px;font:inherit;font-weight:700;font-size:17px;border:0;background:var(--ink);color:#fff;cursor:pointer;text-decoration:none;border-bottom:4px solid var(--ochre)}
+  button:hover,.btn:hover{background:#000}
+  .btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink);border-bottom:4px solid var(--bead)}
+  .status{min-height:24px;margin:12px 0 0;font-weight:600;color:var(--ochre)}
+  .guests{max-width:620px;margin:28px auto 0;text-align:left}
+  .total{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid var(--ink);padding-bottom:8px;margin-bottom:6px}
+  .total strong{font-family:'DM Serif Display',serif;font-size:40px;font-weight:400}
+  ul{list-style:none;margin:0;padding:0}
+  li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #CFC6B5}
+  li span:last-child{color:var(--muted);white-space:nowrap}
+  .empty{color:var(--muted);padding:10px 0}
+  .wa{margin-top:18px}
+  .call{margin:30px auto 0;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .callText{margin:0;font-family:'DM Serif Display',serif;font-size:clamp(30px,7vw,46px);line-height:1.1;color:var(--ochre)}
+  footer{text-align:center;padding:28px 0 40px;color:var(--muted)}
+  footer p{margin:0}
+  @media (max-width:640px){
+    .photos{grid-template-columns:repeat(2,1fr)}
+    .details{grid-template-columns:1fr}
+    form{grid-template-columns:1fr}
+    .count{gap:6px}
+  }
+</style>
+</head>
+<body>
+
+<div class="beads" aria-hidden="true">
+  <svg><defs><pattern id="b" width="60" height="36" patternUnits="userSpaceOnUse">
+    <rect width="60" height="36" fill="#fff"/>
+    <polygon points="0,0 30,0 15,18" fill="#141414"/>
+    <polygon points="30,0 60,0 45,18" fill="#A63D24"/>
+    <polygon points="15,36 45,36 30,18" fill="#2E8BC0"/>
+    <polygon points="45,36 75,36 60,18" fill="#141414"/>
+    <polygon points="-15,36 15,36 0,18" fill="#141414"/>
+  </pattern></defs><rect width="100%" height="36" fill="url(#b)"/></svg>
+</div>
+<div class="lines" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header>
+    <p class="kicker">SIYANIMEMA</p>
+    <h1>Umgidi</h1>
+    <p class="name" id="who"></p>
+    <svg class="zig" viewBox="0 0 360 18" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,15 15,3 30,15 45,3 60,15 75,3 90,15 105,3 120,15 135,3 150,15 165,3 180,15 195,3 210,15 225,3 240,15 255,3 270,15 285,3 300,15 315,3 330,15 345,3 360,15" fill="none" stroke="#141414" stroke-width="3.5"/></svg>
+    <p class="when" id="when"></p>
+
+    <div class="count" id="count" role="timer" aria-live="off">
+      <div class="cell"><span class="num" id="d">00</span><span class="lbl">Iintsuku</span></div>
+      <div class="cell"><span class="num" id="h">00</span><span class="lbl">Iiyure</span></div>
+      <div class="cell"><span class="num" id="m">00</span><span class="lbl">Imizuzu</span></div>
+      <div class="cell"><span class="num" id="s">00</span><span class="lbl">Imizuzwana</span></div>
+    </div>
+    <div class="today" id="today">Namhlanje! Wamkelekile ekhaya, ndoda.</div>
+
+    <div class="call">
+      <p class="kicker">HALALA! HALALA!</p>
+      <p class="callText">Qulani madoda,<br>bhiqani bafazi!</p>
+      <button type="button" id="play" aria-pressed="false">
+        <svg id="icPlay" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
+        <svg id="icPause" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><rect x="5" y="4" width="5" height="16" fill="currentColor"/><rect x="14" y="4" width="5" height="16" fill="currentColor"/></svg>
+        <span id="playLbl">Dlala ingoma · Play the song</span>
+      </button>
+      <audio id="song" src="umgidi-sound.mp3" preload="none"></audio>
+    </div>
+  </header>
+
+  <section>
+    <h2>Uhambo lwakhe</h2>
+    <p class="sub">Ukusuka ebuntwaneni ukuya ebudodeni</p>
+    <div class="photos">
+      <figure><img src="images/child.jpg" alt="As a young boy"><figcaption>Ebuntwaneni</figcaption></figure>
+      <figure><img src="images/school1.jpg" alt="In his school uniform"><figcaption>Esikolweni</figcaption></figure>
+      <figure><img src="images/school2.jpg" alt="Smiling in his school uniform"><figcaption>Ekukhuleni</figcaption></figure>
+      <figure><img src="images/umbhaco.jpg" alt="In umbhaco traditional attire"><figcaption>Ngesiko</figcaption></figure>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><span></span><i></i><i></i><i></i><span></span></div>
+
+  <section>
+    <h2>Iinkcukacha</h2>
+    <p class="sub">The details</p>
+    <div class="details">
+      <div class="card"><h3>Usuku · Date</h3><p id="dDate"></p></div>
+      <div class="card"><h3>Ixesha · Time</h3><p id="dTime"></p></div>
+      <div class="card"><h3>Indawo · Place</h3><p id="dPlace"></p><small><a id="dMap" href="#">Open in Google Maps</a></small></div>
+      <div class="card"><h3>Isinxibo · Dress</h3><p id="dDress"></p></div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><span></span><i></i><i></i><i></i><span></span></div>
+
+  <section id="rsvp">
+    <h2>Uyeza?</h2>
+    <p class="sub">Let us know you're coming</p>
+
+    <form id="form" novalidate>
+      <div><label for="fName">Igama lakho · Your name</label><input id="fName" autocomplete="name" required></div>
+      <div><label for="fCount">Bangaphi? · How many</label><input id="fCount" type="number" min="1" max="30" value="1" inputmode="numeric"></div>
+      <div class="full"><label for="fPhone">Inombolo yefowuni · Phone (optional)</label><input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"></div>
+      <div class="full"><label for="fMsg">Umyalezo · Message (optional)</label><textarea id="fMsg" rows="2"></textarea></div>
+      <div class="full"><button type="submit" id="send">Ndiyeza · I'm coming</button></div>
+    </form>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <div class="wa">
+      <a class="btn alt" id="waBtn" href="#">RSVP on WhatsApp</a>
+      <p class="sub" style="margin-top:10px" id="waText"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="divider" aria-hidden="true" style="margin-bottom:18px"><span></span><i></i><i></i><i></i><span></span></div>
+  <p id="foot"></p>
+</footer>
+
+<div class="lines bottom" aria-hidden="true"></div>
+<div class="beads" aria-hidden="true"><svg><rect width="100%" height="36" fill="url(#b)"/></svg></div>
+
+<script>
+/* ===== Change these details ===== */
+const CONFIG = {
+  name: "Phiko Lukho",               // the young man's name
+  family: "[FAMILY NAME]",               // usapho lakwa-...
+  date: "2026-12-26T12:00:00+02:00",     // 26 December 2026, 12:00
+  place: "eQumrha",
+  mapQuery: "Komga, Eastern Cape, South Africa", // what Google Maps should search for
+  dress: "Imibhaco / traditional attire",
+  whatsapp: "27738898423",               // RSVP number in international format, no + or spaces
+  rsvpPhoneText: "073 889 8423",
+  // Google Form that receives RSVPs (answers go to your Google Sheet)
+  googleForm: {
+    action: "",          // e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
+    name: "entry.0",     // field id for "Name"
+    count: "entry.0",    // field id for "How many people"
+    phone: "entry.0",    // field id for "Phone"
+    message: "entry.0"   // field id for "Message"
+  }
+};
+/* ================================ */
+
+const $ = id => document.getElementById(id);
+const target = new Date(CONFIG.date);
+const dateStr = target.toLocaleDateString("en-ZA",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const timeStr = target.toLocaleTimeString("en-ZA",{hour:"2-digit",minute:"2-digit"});
+
+$("who").textContent = "ka-" + CONFIG.name;
+$("when").textContent = dateStr + " · " + timeStr + " · " + CONFIG.place;
+$("dDate").textContent = dateStr;
+$("dTime").textContent = timeStr;
+$("dPlace").textContent = CONFIG.place;
+$("dMap").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.mapQuery);
+$("dDress").textContent = CONFIG.dress;
+$("foot").textContent = "Enkosi · Siyanilindela";
+if (/^27\d{9}$/.test(CONFIG.whatsapp) && CONFIG.whatsapp !== "27000000000"){
+  $("waText").textContent = "Or send your RSVP to " + CONFIG.rsvpPhoneText;
+  const waMsg = "Molo! Ndiyeza kuMgidi ka-" + CONFIG.name + " ngo-" + dateStr + ".";
+  $("waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(waMsg);
+} else {
+  document.querySelector(".wa").style.display = "none";
+}
+
+const pad = n => String(n).padStart(2,"0");
+function tick(){
+  const diff = target - new Date();
+  if (diff <= 0){
+    $("count").style.display = "none";
+    $("today").style.display = "block";
+    return;
+  }
+  const s = Math.floor(diff/1000);
+  $("d").textContent = Math.floor(s/86400);
+  $("h").textContent = pad(Math.floor(s%86400/3600));
+  $("m").textContent = pad(Math.floor(s%3600/60));
+  $("s").textContent = pad(s%60);
+}
+tick(); setInterval(tick,1000);
+
+/* ===== Song ===== */
+const song = $("song"), playBtn = $("play");
+function setPlaying(on){
+  $("icPlay").style.display = on ? "none" : "";
+  $("icPause").style.display = on ? "" : "none";
+  $("playLbl").textContent = on ? "Misa · Pause" : "Dlala ingoma · Play the song";
+  playBtn.setAttribute("aria-pressed", on ? "true" : "false");
+}
+playBtn.addEventListener("click", async () => {
+  try{
+    if (song.paused){ await song.play(); setPlaying(true); }
+    else { song.pause(); setPlaying(false); }
+  }catch(e){ setPlaying(false); }
+});
+song.addEventListener("ended", () => setPlaying(false));
+
+/* ===== RSVP -> Google Form -> Google Sheet ===== */
+const GF = CONFIG.googleForm;
+const formReady = /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(GF.action);
+$("form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("fName").value.trim();
+  const count = Math.min(30, Math.max(1, parseInt($("fCount").value,10) || 1));
+  if (!name){ $("status").textContent = "Nceda ubhale igama lakho · Please add your name."; $("fName").focus(); return; }
+  if (!formReady){ $("status").textContent = "RSVP isn't switched on yet. Please use the WhatsApp button below."; return; }
+  $("send").disabled = true;
+  const body = new URLSearchParams();
+  body.append(GF.name, name.slice(0,60));
+  body.append(GF.count, String(count));
+  body.append(GF.phone, $("fPhone").value.trim().slice(0,20));
+  body.append(GF.message, $("fMsg").value.trim().slice(0,300));
+  try{
+    await fetch(GF.action, { method:"POST", mode:"no-cors", body });
+    $("status").textContent = "Enkosi, " + name + "! Siyakulindela.";
+    $("form").reset();
+  }catch(err){
+    $("status").textContent = "Couldn't send. Please try again, or RSVP on WhatsApp.";
+  }finally{ $("send").disabled = false; }
+});
+</script>
+</body>
+</html>
