@@ -149,11 +149,13 @@
     <h2>Uyeza?</h2>
     <p class="sub">Let us know you're coming</p>
 
-    <form id="form" novalidate>
-      <div><label for="fName">Igama lakho · Your name</label><input id="fName" autocomplete="name" required></div>
-      <div><label for="fCount">Bangaphi? · How many</label><input id="fCount" type="number" min="1" max="30" value="1" inputmode="numeric"></div>
-      <div class="full"><label for="fPhone">Inombolo yefowuni · Phone (optional)</label><input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"></div>
-      <div class="full"><label for="fMsg">Umyalezo · Message (optional)</label><textarea id="fMsg" rows="2"></textarea></div>
+    <form id="form" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="rsvp">
+      <p hidden><label>Leave empty <input name="bot-field"></label></p>
+      <div><label for="fName">Igama lakho · Your name</label><input id="fName" name="name" autocomplete="name" required></div>
+      <div><label for="fCount">Bangaphi? · How many</label><input id="fCount" name="people" type="number" min="1" max="30" value="1" inputmode="numeric"></div>
+      <div class="full"><label for="fPhone">Inombolo yefowuni · Phone (optional)</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+      <div class="full"><label for="fMsg">Umyalezo · Message (optional)</label><textarea id="fMsg" name="message" rows="2"></textarea></div>
       <div class="full"><button type="submit" id="send">Ndiyeza · I'm coming</button></div>
     </form>
     <p class="status" id="status" aria-live="polite"></p>
@@ -183,15 +185,7 @@ const CONFIG = {
   mapQuery: "Komga, Eastern Cape, South Africa", // what Google Maps should search for
   dress: "Imibhaco / traditional attire",
   whatsapp: "27738898423",               // RSVP number in international format, no + or spaces
-  rsvpPhoneText: "073 889 8423",
-  // Google Form that receives RSVPs (answers go to your Google Sheet)
-  googleForm: {
-    action: "",          // e.g. https://docs.google.com/forms/d/e/XXXX/formResponse
-    name: "entry.0",     // field id for "Name"
-    count: "entry.0",    // field id for "How many people"
-    phone: "entry.0",    // field id for "Phone"
-    message: "entry.0"   // field id for "Message"
-  }
+  rsvpPhoneText: "073 889 8423"
 };
 /* ================================ */
 
@@ -248,23 +242,16 @@ playBtn.addEventListener("click", async () => {
 });
 song.addEventListener("ended", () => setPlaying(false));
 
-/* ===== RSVP -> Google Form -> Google Sheet ===== */
-const GF = CONFIG.googleForm;
-const formReady = /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(GF.action);
+/* ===== RSVP -> Netlify Forms (email alerts + list in Netlify) ===== */
 $("form").addEventListener("submit", async e => {
   e.preventDefault();
   const name = $("fName").value.trim();
-  const count = Math.min(30, Math.max(1, parseInt($("fCount").value,10) || 1));
   if (!name){ $("status").textContent = "Nceda ubhale igama lakho · Please add your name."; $("fName").focus(); return; }
-  if (!formReady){ $("status").textContent = "RSVP isn't switched on yet. Please use the WhatsApp button below."; return; }
+  $("fCount").value = Math.min(30, Math.max(1, parseInt($("fCount").value,10) || 1));
   $("send").disabled = true;
-  const body = new URLSearchParams();
-  body.append(GF.name, name.slice(0,60));
-  body.append(GF.count, String(count));
-  body.append(GF.phone, $("fPhone").value.trim().slice(0,20));
-  body.append(GF.message, $("fMsg").value.trim().slice(0,300));
   try{
-    await fetch(GF.action, { method:"POST", mode:"no-cors", body });
+    const res = await fetch("/", { method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(new FormData($("form"))).toString() });
+    if (!res.ok) throw new Error(res.status);
     $("status").textContent = "Enkosi, " + name + "! Siyakulindela.";
     $("form").reset();
   }catch(err){
