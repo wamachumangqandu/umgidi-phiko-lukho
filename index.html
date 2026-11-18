@@ -113,7 +113,7 @@
       <button type="button" id="play" aria-pressed="false">
         <svg id="icPlay" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
         <svg id="icPause" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><rect x="5" y="4" width="5" height="16" fill="currentColor"/><rect x="14" y="4" width="5" height="16" fill="currentColor"/></svg>
-        <span id="playLbl">Dlala ingoma · Play the song</span>
+        <span id="playLbl">Dlala ingoma</span>
       </button>
       <audio id="song" src="umgidi-sound.mp3" preload="none"></audio>
     </div>
@@ -126,7 +126,7 @@
       <figure><img src="images/child.jpg" alt="As a young boy"><figcaption>Ebuntwaneni</figcaption></figure>
       <figure><img src="images/school1.jpg" alt="In his school uniform"><figcaption>Esikolweni</figcaption></figure>
       <figure><img src="images/school2.jpg" alt="Smiling in his school uniform"><figcaption>Ekukhuleni</figcaption></figure>
-      <figure><img src="images/umbhaco.jpg" alt="In umbhaco traditional attire"><figcaption>Ngesiko</figcaption></figure>
+      <figure><img src="images/umbhaco.jpg" alt="Enxibe umbhaco"><figcaption>Ngesiko</figcaption></figure>
     </div>
   </section>
 
@@ -134,12 +134,11 @@
 
   <section>
     <h2>Iinkcukacha</h2>
-    <p class="sub">The details</p>
-    <div class="details">
-      <div class="card"><h3>Usuku · Date</h3><p id="dDate"></p></div>
-      <div class="card"><h3>Ixesha · Time</h3><p id="dTime"></p></div>
-      <div class="card"><h3>Indawo · Place</h3><p id="dPlace"></p><small><a id="dMap" href="#">Open in Google Maps</a></small></div>
-      <div class="card"><h3>Isinxibo · Dress</h3><p id="dDress"></p></div>
+        <div class="details">
+      <div class="card"><h3>Usuku</h3><p id="dDate"></p></div>
+      <div class="card"><h3>Ixesha</h3><p id="dTime"></p></div>
+      <div class="card"><h3>Indawo</h3><p id="dPlace"></p><small><a id="dMap" href="#">Vula kwi-Google Maps</a></small></div>
+      <div class="card"><h3>Isinxibo</h3><p id="dDress"></p></div>
     </div>
   </section>
 
@@ -147,21 +146,21 @@
 
   <section id="rsvp">
     <h2>Uyeza?</h2>
-    <p class="sub">Let us know you're coming</p>
+    <p class="sub">Sazise ukuba uyeza</p>
 
     <form id="form" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="rsvp">
       <p hidden><label>Leave empty <input name="bot-field"></label></p>
-      <div><label for="fName">Igama lakho · Your name</label><input id="fName" name="name" autocomplete="name" required></div>
-      <div><label for="fCount">Bangaphi? · How many</label><input id="fCount" name="people" type="number" min="1" max="30" value="1" inputmode="numeric"></div>
-      <div class="full"><label for="fPhone">Inombolo yefowuni · Phone (optional)</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
-      <div class="full"><label for="fMsg">Umyalezo · Message (optional)</label><textarea id="fMsg" name="message" rows="2"></textarea></div>
-      <div class="full"><button type="submit" id="send">Ndiyeza · I'm coming</button></div>
+      <div><label for="fName">Igama lakho</label><input id="fName" name="name" autocomplete="name" required></div>
+      <div><label for="fCount">Bangaphi?</label><input id="fCount" name="people" type="number" min="1" max="30" value="1" inputmode="numeric"></div>
+      <div class="full"><label for="fPhone">Inombolo yefowuni (ukuba uyathanda)</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+      <div class="full"><label for="fMsg">Umyalezo (ukuba uyathanda)</label><textarea id="fMsg" name="message" rows="2"></textarea></div>
+      <div class="full"><button type="submit" id="send">Ndiyeza</button></div>
     </form>
     <p class="status" id="status" aria-live="polite"></p>
 
     <div class="wa">
-      <a class="btn alt" id="waBtn" href="#">RSVP on WhatsApp</a>
+      <a class="btn alt" id="waBtn" href="#">Phendula ku-WhatsApp</a>
       <p class="sub" style="margin-top:10px" id="waText"></p>
     </div>
   </section>
@@ -183,7 +182,7 @@ const CONFIG = {
   date: "2026-12-26T10:00:00+02:00",     // 26 December 2026, 10:00
   place: "eQumrha",
   mapQuery: "Komga, Eastern Cape, South Africa", // what Google Maps should search for
-  dress: "Imibhaco / traditional attire",
+  dress: "Imibhaco",
   whatsapp: "27738898423",               // RSVP number in international format, no + or spaces
   rsvpPhoneText: "073 889 8423"
 };
@@ -191,7 +190,9 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 const target = new Date(CONFIG.date);
-const dateStr = target.toLocaleDateString("en-ZA",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const XH_DAYS = ["NgeCawe","NgoMvulo","NgoLwesibini","NgoLwesithathu","NgoLwesine","NgoLwesihlanu","NgoMgqibelo"];
+const XH_MONTHS = ["kuJanuwari","kuFebruwari","kuMatshi","ku-Epreli","kuMeyi","kuJuni","kuJulayi","ku-Agasti","kuSeptemba","ku-Okthobha","kuNovemba","kuDisemba"];
+const dateStr = XH_DAYS[target.getDay()] + ", " + target.getDate() + " " + XH_MONTHS[target.getMonth()] + " " + target.getFullYear();
 const timeStr = target.toLocaleTimeString("en-ZA",{hour:"2-digit",minute:"2-digit"});
 
 $("who").textContent = "ka-" + CONFIG.name;
@@ -203,8 +204,8 @@ $("dMap").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIC
 $("dDress").textContent = CONFIG.dress;
 $("foot").textContent = "Enkosi · Siyanilindela";
 if (/^27\d{9}$/.test(CONFIG.whatsapp) && CONFIG.whatsapp !== "27000000000"){
-  $("waText").textContent = "Or send your RSVP to " + CONFIG.rsvpPhoneText;
-  const waMsg = "Molo! Ndiyeza kuMgidi ka-" + CONFIG.name + " ngo-" + dateStr + ".";
+  $("waText").textContent = "Okanye thumela ku-" + CONFIG.rsvpPhoneText;
+  const waMsg = "Molo! Ndiyeza kuMgidi ka-" + CONFIG.name + " " + dateStr + ".";
   $("waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(waMsg);
 } else {
   document.querySelector(".wa").style.display = "none";
@@ -231,7 +232,7 @@ const song = $("song"), playBtn = $("play");
 function setPlaying(on){
   $("icPlay").style.display = on ? "none" : "";
   $("icPause").style.display = on ? "" : "none";
-  $("playLbl").textContent = on ? "Misa · Pause" : "Dlala ingoma · Play the song";
+  $("playLbl").textContent = on ? "Misa" : "Dlala ingoma";
   playBtn.setAttribute("aria-pressed", on ? "true" : "false");
 }
 playBtn.addEventListener("click", async () => {
@@ -246,7 +247,7 @@ song.addEventListener("ended", () => setPlaying(false));
 $("form").addEventListener("submit", async e => {
   e.preventDefault();
   const name = $("fName").value.trim();
-  if (!name){ $("status").textContent = "Nceda ubhale igama lakho · Please add your name."; $("fName").focus(); return; }
+  if (!name){ $("status").textContent = "Nceda ubhale igama lakho."; $("fName").focus(); return; }
   $("fCount").value = Math.min(30, Math.max(1, parseInt($("fCount").value,10) || 1));
   $("send").disabled = true;
   try{
@@ -255,7 +256,7 @@ $("form").addEventListener("submit", async e => {
     $("status").textContent = "Enkosi, " + name + "! Siyakulindela.";
     $("form").reset();
   }catch(err){
-    $("status").textContent = "Couldn't send. Please try again, or RSVP on WhatsApp.";
+    $("status").textContent = "Akuthunyelwanga. Nceda uzame kwakhona, okanye uphendule ku-WhatsApp.";
   }finally{ $("send").disabled = false; }
 });
 </script>
