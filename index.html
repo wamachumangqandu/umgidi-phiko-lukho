@@ -315,8 +315,14 @@ $("form").addEventListener("submit", async e => {
   try{
     const res = await fetch("/", { method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body: new URLSearchParams(new FormData($("form"))).toString() });
     if (!res.ok) throw new Error(res.status);
-    $("status").textContent = "Enkosi, " + name + "! Siyakulindela.";
+    $("status").textContent = "Enkosi, " + name + "! Siyakulindela. Sikuthumela ku-WhatsApp…";
+    const n = parseInt($("fCount").value, 10) || 1;
+    const msg = $("fMsg").value.trim();
+    let wa = "Molo! Ngu-" + name + " lo. Ndiyeza kuMgidi ka-" + CONFIG.name + " " + dateStr + ".";
+    if (n > 1) wa += " Siza " + n + ".";
+    if (msg) wa += " " + msg;
     $("form").reset();
+    setTimeout(() => { window.location.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(wa); }, 900);
   }catch(err){
     $("status").textContent = "Akuthunyelwanga. Nceda uzame kwakhona, okanye uphendule ku-WhatsApp.";
   }finally{ $("send").disabled = false; }
