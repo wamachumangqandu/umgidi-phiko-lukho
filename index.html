@@ -73,6 +73,12 @@
   .wa{margin-top:18px}
   .call{margin:30px auto 0;display:flex;flex-direction:column;align-items:center;gap:14px}
   .callText{margin:0;font-family:'DM Serif Display',serif;font-size:clamp(30px,7vw,46px);line-height:1.1;color:var(--ochre)}
+  .cover{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--cloth);border:10px solid var(--ink);box-shadow:inset 0 0 0 6px var(--cloth),inset 0 0 0 10px var(--ink);transition:opacity .6s ease}
+  .cover.hide{opacity:0;pointer-events:none}
+  .coverInner{text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .coverTitle{margin:0;font-family:'DM Serif Display',serif;font-size:clamp(60px,16vw,120px);line-height:1}
+  .coverTitle span{display:block;font-family:'Outfit',sans-serif;font-weight:600;font-size:clamp(22px,5vw,32px);margin-top:10px}
+  #openBtn{font-size:20px;padding:14px 30px}
   footer{text-align:center;padding:28px 0 40px;color:var(--muted)}
   footer p{margin:0}
   @media (max-width:640px){
@@ -83,6 +89,13 @@
 </style>
 </head>
 <body>
+<div class="cover" id="cover" role="dialog" aria-modal="true" aria-labelledby="coverTitle">
+  <div class="coverInner">
+    <p class="kicker">SIYANIMEMA</p>
+    <p class="coverTitle" id="coverTitle">KuMgidi<br><span>ka-Phiko Lukho</span></p>
+    <button type="button" id="openBtn">Vula isimemo</button>
+  </div>
+</div>
 
 <div class="beads" aria-hidden="true">
   <svg><defs><pattern id="b" width="60" height="36" patternUnits="userSpaceOnUse">
@@ -120,7 +133,7 @@
         <svg id="icPause" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><rect x="5" y="4" width="5" height="16" fill="currentColor"/><rect x="14" y="4" width="5" height="16" fill="currentColor"/></svg>
         <span id="playLbl">Dlala ingoma</span>
       </button>
-      <audio id="song" src="umgidi-sound.mp3" preload="none"></audio>
+      <audio id="song" src="umgidi-sound.mp3" preload="auto"></audio>
     </div>
   </header>
 
@@ -272,6 +285,25 @@ playBtn.addEventListener("click", async () => {
   }catch(e){ setPlaying(false); }
 });
 song.addEventListener("ended", () => setPlaying(false));
+
+/* ===== Start the song as soon as the invitation opens ===== */
+(() => {
+  const cover = $("cover");
+  let started = false;
+  function closeCover(){ cover.classList.add("hide"); setTimeout(() => cover.remove(), 700); }
+  async function tryPlay(){
+    if (started) return true;
+    try { await song.play(); started = true; setPlaying(true); return true; }
+    catch(e){ return false; }
+  }
+  // 1) Try to play straight away (works when the browser allows sound).
+  tryPlay().then(ok => { if (ok) closeCover(); });
+  // 2) Otherwise the first tap on "Vula isimemo" (or anywhere) starts it.
+  $("openBtn").addEventListener("click", () => { tryPlay(); closeCover(); });
+  const firstTouch = (e) => { if (e && e.target && e.target.closest && e.target.closest("#play")) return; tryPlay(); window.removeEventListener("pointerdown", firstTouch); window.removeEventListener("keydown", firstTouch); };
+  window.addEventListener("pointerdown", firstTouch);
+  window.addEventListener("keydown", firstTouch);
+})();
 
 /* ===== RSVP -> Netlify Forms (email alerts + list in Netlify) ===== */
 $("form").addEventListener("submit", async e => {
