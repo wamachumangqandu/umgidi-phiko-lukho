@@ -166,10 +166,11 @@
   <div class="divider" aria-hidden="true"><span></span><i></i><i></i><i></i><span></span></div>
 
   <section id="rsvp">
-    <h2>Uyeza?</h2>
-    <p class="sub">Sazise ukuba uyeza</p>
+    <h2>Imibuzo</h2>
+    <p class="sub">Unombuzo? Sithumele umyalezo ku-WhatsApp</p>
 
-    <form id="form" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <!-- RSVP form hidden for now; remove "hidden" to bring it back -->
+    <form hidden id="form" name="rsvp" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
       <input type="hidden" name="form-name" value="rsvp">
       <p hidden><label>Leave empty <input name="bot-field"></label></p>
       <div><label for="fName">Igama lakho</label><input id="fName" name="name" autocomplete="name" required></div>
@@ -178,10 +179,10 @@
       <div class="full"><label for="fMsg">Umyalezo (ukuba uyathanda)</label><textarea id="fMsg" name="message" rows="2"></textarea></div>
       <div class="full"><button type="submit" id="send">Ndiyeza</button></div>
     </form>
-    <p class="status" id="status" aria-live="polite"></p>
+    <p class="status" id="status" aria-live="polite" hidden></p>
 
     <div class="wa">
-      <a class="btn alt" id="waBtn" href="#">Phendula ku-WhatsApp</a>
+      <a class="btn alt" id="waBtn" href="#">Buza ku-WhatsApp</a>
       <p class="sub" style="margin-top:10px" id="waText"></p>
     </div>
   </section>
@@ -225,8 +226,8 @@ $("dMap").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIC
 $("dDress").textContent = CONFIG.dress;
 $("foot").textContent = "Enkosi · Siyanilindela";
 if (/^27\d{9}$/.test(CONFIG.whatsapp) && CONFIG.whatsapp !== "27000000000"){
-  $("waText").textContent = "Okanye thumela ku-" + CONFIG.rsvpPhoneText;
-  const waMsg = "Molo! Ndiyeza kuMgidi ka-" + CONFIG.name + " " + dateStr + ".";
+  $("waText").textContent = CONFIG.rsvpPhoneText;
+  const waMsg = "Molo! Ndinombuzo ngoMgidi ka-" + CONFIG.name + ".";
   $("waBtn").href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(waMsg);
 } else {
   document.querySelector(".wa").style.display = "none";
